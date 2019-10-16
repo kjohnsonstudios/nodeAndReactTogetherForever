@@ -8,12 +8,23 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/api/hello', (req, res) => {
+getData = (fileName, type) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(fileName, type, (err, data) => {
+        err ? reject(err) : resolve(data);
+    });
+  });
+}
+
+app.get('/api/people', (req, res) => {
   try{
-    fs.readFile("data/example.txt", "utf8", function(err, data){
-      if(err) throw err;
-      var resultArray = data;
-      res.send({ express: resultArray });
+    getData("data/example.txt", "utf8")
+    .then((express) => {
+      res.send({ express });
+    })
+    .catch(error => {
+      console.warn("ERR IS KYLE: ",error)
+      res.send({ express: 'KYLE Error From Express' });
     });
   } catch (err) {
     console.warn("ERR IS: ",err)
@@ -21,7 +32,7 @@ app.get('/api/hello', (req, res) => {
   }
 });
 
-app.post('/api/world', (req, res) => {
+app.post('/api/search', (req, res) => {
   try{
     fs.readFile("data/example.txt", "utf8", function(err, data){
       if(err) throw err;

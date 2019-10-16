@@ -14,7 +14,7 @@ class App extends Component {
   }
   
   fetchPeople = async () => {
-    const response = await fetch('/api/hello');
+    const response = await fetch('/api/people');
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
     return body;
@@ -23,7 +23,7 @@ class App extends Component {
   searchList = async (e) => {
     e.preventDefault();
     this.setState({ post: e.target.value})
-    const response = await fetch('/api/world', {
+    const response = await fetch('/api/search', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
